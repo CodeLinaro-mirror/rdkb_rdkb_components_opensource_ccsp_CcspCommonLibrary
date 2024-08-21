@@ -88,7 +88,6 @@ typedef struct _ipc_ppp_lcp_msg
 typedef struct _ipc_ppp_event_msg_t
 {
     pid_t pid;
-    char interface[IFNAME_LENGTH];
     PPP_STATES pppState; //lcp state
     union
     {
