@@ -249,7 +249,7 @@ HttpWctoRequest
 #ifdef _ANSC_IPV6_COMPATIBLE_
         if ( _ansc_strchr(pHttpHfoHost->HostName, ':') )
         {
-            _ansc_sprintf(pHttpHfoHost->HostName, "%s%s%s", "[", pReqUri->HostName, "]");
+            _ansc_sprintf(pHttpHfoHost->HostName, "[%.*s]", (int)(sizeof(pHttpHfoHost->HostName) - sizeof("[]")), pReqUri->HostName);
         }
 #endif
         pHttpHfoHost->HostPort = pReqUri->HostPort;
