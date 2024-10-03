@@ -99,7 +99,7 @@ typedef struct _ipc_ppp_event_msg_t
 
 }ipc_ppp_event_msg_t;
 
-#ifdef FEATURE_MAPT
+#if defined(FEATURE_MAPT) || defined(MAPT_UNIFICATION_ENABLED)
 typedef struct _ipc_mapt_data_t
 {
    char brIPv6Prefix[BUFLEN_128];
@@ -171,7 +171,7 @@ typedef struct _ipc_dhcpv6_data_t
    char domainName[BUFLEN_64];  /**< New domain Name, if addressAssigned==TRUE */
    char ntpserver[BUFLEN_128];  /**< New ntp server(s), dhcp server may provide this */
    char aftr[AFTR_NAME_LENGTH];      /**< dhcp server may provide this */
-#ifdef FEATURE_MAPT
+#if defined(FEATURE_MAPT) || defined(MAPT_UNIFICATION_ENABLED)
    ipc_mapt_data_t mapt;
 #endif
 } ipc_dhcpv6_data_t;
