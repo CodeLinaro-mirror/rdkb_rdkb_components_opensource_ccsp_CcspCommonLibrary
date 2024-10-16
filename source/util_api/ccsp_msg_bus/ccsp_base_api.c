@@ -634,9 +634,18 @@ int CcspBaseIf_getParameterValues_rbus(
                     else
                     {
                         char* sValue = rbusValue_ToString(value, NULL, 0);
-                        val[i]->parameterValue = bus_info->mallocfunc(strlen(sValue)+1);
-                        strcpy_s(val[i]->parameterValue, (strlen(sValue)+1), sValue);
-                        bus_info->freefunc(sValue);
+                        if (sValue)
+                        {
+                            val[i]->parameterValue = bus_info->mallocfunc(strlen(sValue)+1);
+                         /*
+                          * LIMITATION
+                          * Below strcpy_s() api reverting to strcpy() api,
+                          * Because, safec has the limitation of copying only 4k ( RSIZE_MAX ) to destination pointer
+                          * And here, we have source pointer size more than 4k, i.e simetimes 190k also . So it won't copy to destination.
+                          */
+                            strcpy(val[i]->parameterValue, sValue);
+                            bus_info->freefunc(sValue);
+                        }
                     }
                     next = rbusProperty_GetNext(next);
                     RBUS_LOG("Param [%d] Name = %s, Type = %d, Value = %s\n", i,val[i]->parameterName, val[i]->type, val[i]->parameterValue);
@@ -3256,11 +3265,19 @@ int PSM_Get_Record_Value
                     else
                     {
                         char* sValue = rbusValue_ToString(value, NULL, 0);
-                        val[i]->parameterValue = bus_info->mallocfunc(strlen(sValue)+1);
-                        strcpy_s(val[i]->parameterValue, (strlen(sValue)+1), sValue);
-                        bus_info->freefunc(sValue);
+                        if (sValue)
+                        {
+                            val[i]->parameterValue = bus_info->mallocfunc(strlen(sValue)+1);
+                            /*
+                             * LIMITATION
+                             * Below strcpy_s() api reverting to strcpy() api,
+                             * Because, safec has the limitation of copying only 4k ( RSIZE_MAX ) to destination pointer
+                             * And here, we have source pointer size more than 4k, i.e simetimes 190k also . So it won't copy to destination.
+                             */
+                            strcpy(val[i]->parameterValue, sValue);
+                            bus_info->freefunc(sValue);
+                        }
                     }
-
                     next = rbusProperty_GetNext(next);
                 }
             }
