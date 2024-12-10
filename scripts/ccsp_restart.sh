@@ -20,6 +20,7 @@
 
 UTOPIA_PATH="/etc/utopia/service.d"
 TAD_PATH="/usr/ccsp/tad"
+CcspHome_Security=`sysevent get HomeSecuritySupport`
 source $TAD_PATH/corrective_action.sh
 source $UTOPIA_PATH/log_env_var.sh
 exec 3>&1 4>&2 >>$SELFHEALFILE 2>&1
@@ -39,7 +40,10 @@ exec 3>&1 4>&2 >>$SELFHEALFILE 2>&1
 		rm -rf /tmp/Notify_initialized
 	fi
         killall notify_comp
-        killall CcspHomeSecurity
+        
+        if [ "$CcspHome_Security" != "false" ]; then 
+            killall CcspHomeSecurity
+        fi
 
 	if [ -f "/tmp/cm_initialized" ]
 	then
@@ -236,7 +240,7 @@ ulimit -c unlimited
 	sleep 2
         
         #CcspHomeSecurity
-        if [ "$MODEL_NUM" = "DPC3939B" ] || [ "$MODEL_NUM" = "DPC3941B" ]; then 
+        if [ "$MODEL_NUM" = "DPC3939B" ] || [ "$MODEL_NUM" = "DPC3941B" ] || [ "$CcspHome_Security" = "false" ]; then 
          echo_t "Disabling CcpsHomeSecurity for BWG "
         else
         echo "[`getDateTime`] RDKB_SELFHEAL : Resetting process CcspHomeSecurity on atom reset"
